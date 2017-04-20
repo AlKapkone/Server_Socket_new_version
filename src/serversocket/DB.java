@@ -19,7 +19,7 @@ public class DB {
         Class.forName("org.sqlite.JDBC");
         conn = DriverManager.getConnection("jdbc:sqlite:Test.s3db");
 
-        System.out.println("DB Successfully connected!");
+        System.out.println("База Підключена!");
     }
 
     private  static Statement statmt;
@@ -29,7 +29,7 @@ public class DB {
         statmt = conn.createStatement();
         statmt.execute("CREATE TABLE if not exists 'users' ('id' INTEGER PRIMARY KEY AUTOINCREMENT, 'Name' text, 'Email' text);");
 
-        System.out.println("Table created or already exists");
+        System.out.println("Таблицю створено або така уже існує.");
     }
 
     public static void updateUser(List<User> usersList) throws SQLException

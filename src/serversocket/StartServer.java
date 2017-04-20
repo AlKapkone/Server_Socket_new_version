@@ -37,17 +37,17 @@ public class StartServer {
         System.out.println("Server running...");
     }
     
-    private PrintWriter respons;
+    private PrintWriter response;
 
     private void waitClient() throws IOException {
         client = servSocket.accept();
-        respons = new PrintWriter(client.getOutputStream());
+        response = new PrintWriter(client.getOutputStream());
         System.out.println("Connection from: " + client.getInetAddress());
 
     }
-    private final ChoiceCommand choiceComand = new ChoiceCommand();
+    private final ChoiceCommand choiceCommand = new ChoiceCommand();
 
-    private static final int SHORT_COMAND_LENGTH = 3;
+    private static final int SHORT_COMMAND_LENGTH = 3;
 
     public void clientExsecute() {
         try (Scanner in = new Scanner(client.getInputStream())) {
@@ -55,7 +55,7 @@ public class StartServer {
             while (true) {
                 String request = in.nextLine();
 
-                if (request.length() == SHORT_COMAND_LENGTH) {
+                if (request.length() == SHORT_COMMAND_LENGTH) {
                     command = request;
                     sendRespons("Ok");
                     if (request.equals("Exi")) {
@@ -63,19 +63,19 @@ public class StartServer {
                         return;
                     }
                 } else {
-                    String res = choiceComand.choice(command, request);
+                    String res = choiceCommand.choice(command, request);
                     sendRespons(res);
                 }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            respons.close();
+            response.close();
         }
     }
 
     private void sendRespons(String message) {
-        respons.write(message + "\n");
-        respons.flush();
+        response.write(message + "\n");
+        response.flush();
     }
 }
