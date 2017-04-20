@@ -33,11 +33,7 @@ public class Exsecute {
     }
 
     public String getAllUsers() throws SQLException, JSONException, ClassNotFoundException {
-        //TODO getUser
-
-        String allUsers = DB.getAllUsers();
-
-        return allUsers;
+        return DB.getAllUsers();
     }
     
 }

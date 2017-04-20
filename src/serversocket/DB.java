@@ -2,7 +2,6 @@ package serversocket;
 
 import com.google.gson.Gson;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,7 +19,7 @@ public class DB {
         Class.forName("org.sqlite.JDBC");
         conn = DriverManager.getConnection("jdbc:sqlite:Test.s3db");
 
-        System.out.println("База Підключена!");
+        System.out.println("DB Successfully connected!");
     }
 
     private  static Statement statmt;
@@ -30,7 +29,7 @@ public class DB {
         statmt = conn.createStatement();
         statmt.execute("CREATE TABLE if not exists 'users' ('id' INTEGER PRIMARY KEY AUTOINCREMENT, 'Name' text, 'Email' text);");
 
-        System.out.println("Таблицю створено або така уже існує.");
+        System.out.println("Table created or already exists");
     }
 
     public static void updateUser(List<User> usersList) throws SQLException
@@ -54,6 +53,7 @@ public class DB {
         statmt.execute("DELETE FROM 'users' WHERE id = ('"+respId+"')");
         String delResult = "Користувача з ID = " + respId + "видалено";
         System.out.println("Користувача видалено");
+                
         return delResult;
     }
 

@@ -22,8 +22,10 @@ public class StartServer {
         try {
 
             startClient();
-            waitClient();
-            clientExsecute();
+            while (true) {
+                waitClient();
+                clientExsecute();
+            }
 
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -34,35 +36,46 @@ public class StartServer {
         servSocket = new ServerSocket(port);
         System.out.println("Server running...");
     }
+    
+    private PrintWriter respons;
 
     private void waitClient() throws IOException {
         client = servSocket.accept();
+        respons = new PrintWriter(client.getOutputStream());
         System.out.println("Connection from: " + client.getInetAddress());
-    }
-    private final ChoiceComand choiceComand = new ChoiceComand();
 
-    private static final int shortComandLength = 3;
-    
+    }
+    private final ChoiceCommand choiceComand = new ChoiceCommand();
+
+    private static final int SHORT_COMAND_LENGTH = 3;
+
     public void clientExsecute() {
-        try (Scanner in = new Scanner(client.getInputStream());
-                PrintWriter respons = new PrintWriter(client.getOutputStream())) {
+        try (Scanner in = new Scanner(client.getInputStream())) {
             String command = null;
             while (true) {
                 String request = in.nextLine();
 
-//                System.out.println(request.length());
-                if (request.length() == shortComandLength) {
+                if (request.length() == SHORT_COMAND_LENGTH) {
                     command = request;
-                    respons.write("ok\n");
-                    respons.flush();
+                    sendRespons("Ok");
+                    if (request.equals("Exi")) {
+                        System.out.println("Client closed");
+                        return;
+                    }
                 } else {
                     String res = choiceComand.choice(command, request);
-                    respons.write(res + "\n");
-                    respons.flush();
+                    sendRespons(res);
                 }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        } finally {
+            respons.close();
         }
+    }
+
+    private void sendRespons(String message) {
+        respons.write(message + "\n");
+        respons.flush();
     }
 }
